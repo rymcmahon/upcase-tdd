@@ -23,27 +23,58 @@ class Person
   end
 
   def full_name
-    if @middle_name == nil
-      "#{@first_name} #{@last_name}"
-    else
-      "#{@first_name} #{@middle_name} #{@last_name}"
-    end
+    @middle_name == nil ? "#{@first_name} #{@last_name}" : "#{@first_name} #{@middle_name} #{@last_name}"
+  end
+
+  def full_name_with_middle_initial
+    @middle_name == nil ? "#{@first_name} #{@last_name}" : "#{@first_name} #{@middle_name[0]} #{@last_name}"
+  end
+
+  def initials
+    @middle_name == nil ? "#{@first_name[0]} #{@last_name[0]}" : "#{@first_name[0]} #{@middle_name[0]} #{@last_name[0]}"
   end
 end
 
 RSpec.describe Person do
   describe "#full_name" do
     it "concatenates first name, middle name, and last name with spaces" do
-      person = Person.new(first_name: "Ryan", middle_name: "Michael", last_name: "McMahon")
+      person = Person.new(first_name: "Ryan", middle_name: "James", last_name: "Miller")
 
-      expect(person.full_name).to eq("Ryan Michael McMahon")
+      expect(person.full_name).to eq("Ryan James Miller")
     end
-    # it "does not add extra spaces if middle name is missing" do
-    #
-    # end
+    it "does not add extra spaces if middle name is missing" do
+      person = Person.new(first_name: "Ryan", middle_name: nil, last_name: "Miller")
+
+      expect(person.full_name).to eq("Ryan Miller")
+    end
   end
 
-  # describe "#full_name_with_middle_initial"
-  #
-  # describe "#initials"
+  describe "#full_name_with_middle_initial" do
+    it "concatenates first name, middle initial, and last name with spaces" do
+      person =  Person.new(first_name: "Ryan", middle_name: "James", last_name: "Miller")
+
+      expect(person.full_name_with_middle_initial).to eq("Ryan J Miller")
+    end
+
+    it "does not add extra spaces if the middle name is missing" do
+      person =  Person.new(first_name: "Ryan", middle_name: nil, last_name: "Miller")
+
+      expect(person.full_name_with_middle_initial).to eq("Ryan Miller")
+    end
+  end
+
+  describe "#initials" do
+    it "concatenates the initials of a first name, middle name, and last name with spaces" do
+      person =  Person.new(first_name: "Ryan", middle_name: "James", last_name: "Miller")
+
+      expect(person.initials).to eq("R J M")
+    end
+
+    it "does not add extra spaces if the middle name is missing" do
+      person = Person.new(first_name: "Ryan", middle_name: nil, last_name: "Miller")
+
+      expect(person.initials).to eq("R M")
+    end
+
+  end
 end
